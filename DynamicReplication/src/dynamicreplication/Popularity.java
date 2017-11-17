@@ -63,8 +63,8 @@ public class Popularity {
     }
    
     
-    static Date String_to_date(String date_string){
-        DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss"); 
+    private static Date String_to_date(String date_string){
+        DateFormat df = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss,SSS"); 
         Date date = null;
         try {
             date = df.parse(date_string);
@@ -74,7 +74,7 @@ public class Popularity {
         return date;
     }
     
-    static Date Add_time(Date date,int sec){
+    private static Date Add_time(Date date,int sec){
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.SECOND, sec);
