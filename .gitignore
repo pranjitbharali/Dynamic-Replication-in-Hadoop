@@ -1,7 +1,11 @@
 .metadata
+build/
+build.*
+manifest.*
 bin/
 tmp/
 nbproject/
+.nb-gradle/
 *.tmp
 *.bak
 *.swp
