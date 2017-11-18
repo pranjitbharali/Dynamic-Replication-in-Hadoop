@@ -20,30 +20,46 @@ public class Popularity {
         this.interval = i;
     }
     
-    ArrayList<Integer> Max_concurrent_access(String filepath){
-        ArrayList<Integer> result= new ArrayList();
-        Date init = null;
+    HashMap Max_concurrent_access(){
+        HashMap result_hashmap = new HashMap();
+        HashMap list_hashmap = new HashMap();
+        HashMap init_hashmap = new HashMap();
+        Date START = null;
         Date starttime, endtime;
+        String filepath;
         try {
             FileReader in = new FileReader(logfile);
             BufferedReader br = new BufferedReader(in);
             String input;
             int flag = 0;
             int time = 0;
-            ArrayList<Pair<Date,String>> list= new ArrayList();
             while ((input = br.readLine()) != null) {
                 String[] elements = input.split("\t");
-                if(!elements[0].equals(filepath)) continue;
+                filepath = elements[0];
                 starttime = String_to_date(elements[1]);
                 endtime = String_to_date(elements[2]);
                 if(flag==0){
-                    init = starttime;
+                    START = starttime;
                     flag = 1;
                     time = 0;
-                    list.clear();
+                }
+                ArrayList<Integer> result = (ArrayList<Integer>) result_hashmap.get(filepath);
+                if(result == null){
+                    result = new ArrayList<>();
+                    result_hashmap.put(filepath, result);
+                }
+                ArrayList<Pair<Date,String>> list = (ArrayList<Pair<Date,String>>) list_hashmap.get(filepath);
+                if(list == null){
+                    list = new ArrayList<>();
+                    list_hashmap.put(filepath, list);
+                }
+                Date init = (Date) init_hashmap.get(filepath);
+                if(init == null){
+                    init = START;
+                    init_hashmap.put(filepath, init);
                 }
                 while(starttime.compareTo(Add_time(init,interval))>0){
-                    System.out.println(starttime+"   "+init+"  "+Add_time(init,interval)+" "+list.size());
+                  //  System.out.println(starttime+"   "+init+"  "+Add_time(init,interval)+" "+list.size());
                     result.add (Get_Max_Overlaps(list));
                     init = Add_time(init,interval);
                     time = time + 1;
@@ -51,20 +67,39 @@ public class Popularity {
                 }
                 list.add(new Pair(starttime,"start"));
                 list.add(new Pair(endtime,"end"));
+                list_hashmap.put(filepath, list);
+                result_hashmap.put(filepath, result);
+                init_hashmap.put(filepath, init);
             }
-            if(!list.isEmpty()){
+            Iterator iter = (Iterator) result_hashmap.entrySet().iterator();
+            while(iter.hasNext()) {
+                Map.Entry entry = (Map.Entry) iter.next();
+                filepath = (String) entry.getKey();
+                ArrayList<Integer> result = (ArrayList<Integer>) entry.getValue();
+                System.out.println("filepath is  " + filepath);
+                ArrayList<Pair<Date,String>> list = (ArrayList<Pair<Date,String>>) list_hashmap.get(filepath);
+                Date init = (Date) init_hashmap.get(filepath);
+                Date now_time = new Date();
+                while(now_time.compareTo(Add_time(init,interval))>0){
+                    result.add (Get_Max_Overlaps(list));
+                    init = Add_time(init,interval);
+                    time = time + 1;
+                    list.clear();
+                }
+            }
+            /*if(!list.isEmpty()){
                 result.add(Get_Max_Overlaps(list));
-            }
+            }*/
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     //    double p = Calculate_popularity(result);
-        return result;
+        return result_hashmap;
     }
    
     
     private static Date String_to_date(String date_string){
-        DateFormat df = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss,SSS"); 
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss,SSS"); 
         Date date = null;
         try {
             date = df.parse(date_string);
