@@ -86,7 +86,7 @@ public class AuditLogParser {
                                     System.out.println(len);
                                     Date start = String_to_date(start_time);
                                     Date end = Add_time(start, (int)(len/10));
-                                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss,SSS");
+                                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SSS");
                                     end_time = df.format(end);
                                 }
 
@@ -108,7 +108,7 @@ public class AuditLogParser {
    	}
         
     private static Date String_to_date(String date_string){
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss,SSS"); 
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SSS"); 
         Date date = null;
         try {
             date = df.parse(date_string);

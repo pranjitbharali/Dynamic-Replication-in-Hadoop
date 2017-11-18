@@ -80,7 +80,7 @@ public class Popularity {
                 ArrayList<Pair<Date,String>> list = (ArrayList<Pair<Date,String>>) list_hashmap.get(filepath);
                 Date init = (Date) init_hashmap.get(filepath);
                 Date now_time = new Date();
-                while(now_time.compareTo(Add_time(init,interval))>0){
+                while(now_time.compareTo(init)>0){
                     result.add (Get_Max_Overlaps(list));
                     init = Add_time(init,interval);
                     time = time + 1;
@@ -99,7 +99,7 @@ public class Popularity {
    
     
     private static Date String_to_date(String date_string){
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss,SSS"); 
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SSS"); 
         Date date = null;
         try {
             date = df.parse(date_string);

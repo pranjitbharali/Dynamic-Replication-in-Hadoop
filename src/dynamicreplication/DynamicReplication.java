@@ -1,7 +1,6 @@
 
 package dynamicreplication;
 
-import java.io.IOException;
 import java.util.*;
 
 public class DynamicReplication {
@@ -9,7 +8,7 @@ public class DynamicReplication {
 
     public static void main(String[] args) {
         AuditLogParser.Parse();
-        Popularity p = new Popularity("output.log",84600);
+        Popularity p = new Popularity("output.log",86400);
         HashMap result_hashmap= p.Max_concurrent_access();
         System.out.println(result_hashmap);
         Iterator iter = (Iterator) result_hashmap.entrySet().iterator();
